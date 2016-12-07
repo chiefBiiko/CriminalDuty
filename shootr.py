@@ -1,6 +1,6 @@
 # python pygame shootr 'Criminal Duty'
 # -----------------------------------------------------------------------------
-import os, sys, random, math, pygame, string
+import os, sys, random, math, pygame, string, time
 from pygame import *
 
 black = 0, 0, 0
@@ -79,7 +79,6 @@ def load_png(name):
 class Cop(pygame.sprite.Sprite):
     """This is the Cop class so far, cop by foot chasing player.
 Should get another police class that shoots, like: Tank.."""
-    
     def __init__(self, color):
         """Give stoopid cop look"""
         pygame.sprite.Sprite.__init__(self)
@@ -89,7 +88,6 @@ Should get another police class that shoots, like: Tank.."""
         self.image, self.rect = load_png('cop.png')
         self.rect.x = random.randrange(screen_w)
         self.rect.y = random.randrange(330)
-
     def update(self):
         """Cop movement: constantly chasing the player"""
         if player_x < self.rect.x:
@@ -103,7 +101,6 @@ Should get another police class that shoots, like: Tank.."""
 
 class Tank(pygame.sprite.Sprite):
     """Tank doesnt chase player, adjusts y only and shoots player"""
-    
     def __init__(self, color):
         """Assign pic later on"""
         pygame.sprite.Sprite.__init__(self)
@@ -112,7 +109,6 @@ class Tank(pygame.sprite.Sprite):
         #self.rect = self.image.get_rect()
         self.image, self.rect = load_png('tank.png')
         self.health = 1000
-
     def update(self):
         """Tank movement: adjusting y rel 2 player"""
         if player_y < self.rect.y:
@@ -121,7 +117,6 @@ class Tank(pygame.sprite.Sprite):
             self.rect.y += 1
         elif player_y == self.rect.y:
             self.shoot()
-
     def shoot(self):
         """Tank shoots player"""
         canon = Bullet([player_x, player_y], [self.rect.x, self.rect.y])
@@ -137,17 +132,14 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image, self.rect = load_png('goon.png')
         self.rect.x, self.rect.y = 2, 2
-        self.health = 100
-        
+        self.health = 100   
     def update(self):
         """player_x,_y are the players new coords for every next frame"""
         self.rect.x = player_x
         self.rect.y = player_y
-
     def hit_vox(self):
         """Play this when player got hit"""
-        pygame.mixer.Sound(HITWAV).play()
-        
+        pygame.mixer.Sound(HITWAV).play()    
     def kill_vox(self):
         """Play this when player just killed"""
         pygame.mixer.Sound(random.choice(KILLWAV)).play()
@@ -155,7 +147,6 @@ class Player(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     """Class for bullets player shoots"""
     speed = 4.
-    
     def __init__(self, mouse, player):
         """Give look and provide coords at init"""
         pygame.sprite.Sprite.__init__(self)
@@ -163,8 +154,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill(black)
         self.mouse_x, self.mouse_y = mouse[0], mouse[1]
         self.player = player
-        self.rect = self.image.get_rect()
-        
+        self.rect = self.image.get_rect()    
     def update(self):
         """Bullets flying their way"""
         distance = [self.mouse_x - self.player[0], self.mouse_y - self.player[1]]
@@ -185,7 +175,6 @@ class Footr(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = 0, 350
         self.image.blit(self.text, (10, 10))
-
     def update(self):
         """Updating health and score"""
         self.text = self.font.render('{}'.format(NAME) + '    health: {}'.format(player.health) + '    cops shot: {}'.format(score) + '    tank: {}'.format(tank.health), 1, white)
@@ -229,8 +218,8 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             display_box(screen, 'cops shot: {}'.format(score))
-            raw_input('Exit: Press Enter to quit')
-            done = True; pygame.quit(); sys.exit();
+            time.sleep(5)
+            done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
             bullet = Bullet(pygame.mouse.get_pos(), [player.rect.x, player.rect.y])
             bullet.rect.x = player.rect.x
@@ -258,8 +247,8 @@ while not done:
                 move_player_y=0
             elif event.key == K_ESCAPE:
                 display_box(screen, 'cops shot: {}'.format(score))
-                raw_input('Exit: Press Enter to quit') 
-                done = True; pygame.quit(); sys.exit();
+                time.sleep(5)
+                done = True
 
     # --- Game logic
 
@@ -305,19 +294,19 @@ while not done:
             canon_list.remove(canon)
             all_sprites_list.remove(canon)
             player.health -= 10
-
+    # Revive cops++ when all got shot
     if len(cop_list) == 0:
         num_cops += 1
         for i in range(num_cops):
             cop = Cop(blue)
             cop_list.add(cop)
             all_sprites_list.add(cop)
-
+    # player dead
     if player.health <= 0:
         display_box(screen, 'dead.. total cops shot: {}'.format(score))
         raw_input('Exit: Press Enter to quit') 
         done = True; pygame.quit(); sys.exit();
-
+    # A.C.A.B. player won
     if tank.health <= 0:
         score += 100
         display_box(screen, 'A.C.A.B! total cops shot: {}'.format(score))
@@ -328,6 +317,5 @@ while not done:
     all_sprites_list.draw(screen)
     pygame.display.flip()
     clock.tick(30)
-
-pygame.quit()
 # -----------------------------------------------------------------------------
+pygame.quit()
