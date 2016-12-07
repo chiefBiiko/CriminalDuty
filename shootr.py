@@ -8,8 +8,6 @@ def main():
     """CriminalDuty - a mini pygame for goons"""
     black = 0, 0, 0
     white = 255, 255, 255
-    red = 255, 0, 0
-    blue = 0, 0, 255
     screen_w, screen_h = 700, 400
     player_x, player_y = 0, 0
     move_player_x, move_player_y = 0, 0
@@ -50,7 +48,7 @@ def main():
         """ask(screen, question) -> answer"""
         pygame.font.init()
         current_string = []
-        display_box(screen, question + ": " + string.join(current_string, ""))
+        display_box(screen, question + ': ' + string.join(current_string, ''))
         while 1:
             inkey = get_key()
             if inkey == K_BACKSPACE:
@@ -58,11 +56,11 @@ def main():
             elif inkey == K_RETURN:
                 break
             elif inkey == K_MINUS:
-                current_string.append("_")
+                current_string.append('_')
             elif inkey <= 127:
                 current_string.append(chr(inkey))
-            display_box(screen, question + ": " + string.join(current_string, ""))
-        return string.join(current_string, "")
+            display_box(screen, question + ': ' + string.join(current_string, ''))
+        return string.join(current_string, '')
     # -----------------------------------------------------------------------------
     def load_png(name):
         """Load image and return image object"""
@@ -80,9 +78,8 @@ def main():
 
     # CLASSES ---------------------------------------------------------------------
     class Cop(pygame.sprite.Sprite):
-        """This is the Cop class so far, cop by foot chasing player.
-    Should get another police class that shoots, like: Tank.."""
-        def __init__(self, color):
+        """This is the Cop class so far, cop by foot chasing player."""
+        def __init__(self):
             """Give stoopid cop look"""
             pygame.sprite.Sprite.__init__(self)
             self.image, self.rect = load_png('cop.png')
@@ -101,7 +98,7 @@ def main():
     # -----------------------------------------------------------------------------
     class Tank(pygame.sprite.Sprite):
         """Tank doesnt chase player, adjusts y only and shoots player"""
-        def __init__(self, color):
+        def __init__(self):
             """Assign pic later on"""
             pygame.sprite.Sprite.__init__(self)
             self.image, self.rect = load_png('tank.png')
@@ -197,13 +194,13 @@ def main():
     canon_list = pygame.sprite.Group()
     # -----------------------------------------------------------------------------
     for i in range(num_cops):
-        cop = Cop(blue)
+        cop = Cop()
         cop_list.add(cop)
         all_sprites_list.add(cop)
     # -----------------------------------------------------------------------------
     player = Player()
     player_list.add(player)
-    tank = Tank(blue)
+    tank = Tank()
     tank.rect.x, tank.rect.y = 500, 200
     tank_list.add(tank)
     footr = Footr()
@@ -293,7 +290,7 @@ def main():
         if len(cop_list) == 0:
             num_cops += 1
             for i in range(num_cops):
-                cop = Cop(blue)
+                cop = Cop()
                 cop_list.add(cop)
                 all_sprites_list.add(cop)
         # player dead
