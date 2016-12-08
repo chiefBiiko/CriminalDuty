@@ -1,8 +1,8 @@
 # CriminalDuty - a mini pygame
 # -----------------------------------------------------------------------------
-import os, sys, random, math, pygame, string
+import os, random, math, pygame
 from pygame import *
-import time as sleepr
+from time import sleep as sleepr
 
 def main():
     """CriminalDuty - a mini pygame for goons"""
@@ -219,7 +219,7 @@ def main():
     pygame.mixer.pre_init(frequency = 44100, size = -16, channels = 2, buffer = 4096)
     pygame.init(); print(pygame.mixer.get_init())
     pygame.mixer.music.load(random.choice(SONGS))
-    sleepr.sleep(1)
+    sleepr(1)
     pygame.mixer.music.play()
     screen = pygame.display.set_mode([screen_w, screen_h])
     pygame.display.set_caption('CriminalDuty')
@@ -228,19 +228,18 @@ def main():
     screen.fill(black)
     screen.blit(pygame.font.Font(None, 96).render('Level 1', 1, white), (250, 150))
     pygame.display.flip()
-    sleepr.sleep(5)
+    sleepr(5)
     # -----------------------------------------------------------------------------
     for i in range(num_cops):
         cop = Cop()
         cop_list.add(cop)
         all_sprites_list.add(cop)
-    # -----------------------------------------------------------------------------
     player = Player()
     player_list.add(player)
     tank = Tank()
     tank_list.add(tank)
     footr = Footr()
-    all_sprites_list.add(player, footr, tank)
+    all_sprites_list.add(player, tank, footr)
 
     # MAIN PROGRAM LOOP  ----------------------------------------------------------
     while not done:
@@ -248,7 +247,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 display_box(screen, 'cops shot: {}'.format(score))
-                sleepr.sleep(10)
+                sleepr(10)
                 done = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 player.shoot()
@@ -273,7 +272,7 @@ def main():
                     move_player_y = 0
                 elif event.key == K_ESCAPE:
                     display_box(screen, 'cops shot: {}'.format(score))
-                    sleepr.sleep(10)
+                    sleepr(10)
                     done = True
         # --- Game logic
         all_sprites_list.update()
@@ -321,7 +320,7 @@ def main():
                 bullet_list.remove(bullet)
                 all_sprites_list.remove(bullet)
         # tanks canons aimed at player
-        """canons out of bounds r not removed, u cant hide outta view, Tank instance will still shoot ya"""
+        """canons out of bounds r not removed, u cant hide outta view, tank will still shoot ya"""
         for canon in canon_list:
             canon_hit_list = pygame.sprite.spritecollide(canon, player_list, False)
             for hit in canon_hit_list:
@@ -330,7 +329,7 @@ def main():
                 all_sprites_list.remove(canon)
                 player.health -= 10
         # helis rockets aimed at player
-        """rockets out of bounds r not removed, u cant hide outta view, Heli instance will still shoot ya"""
+        """rockets out of bounds r not removed, u cant hide outta view, heli will still shoot ya"""
         for rocket in rocket_list:
             rocket_hit_list = pygame.sprite.spritecollide(rocket, player_list, False)
             for hit in rocket_hit_list:
@@ -338,7 +337,7 @@ def main():
                 rocket_list.remove(rocket)
                 all_sprites_list.remove(rocket)
                 player.health -= 15
-        # revive cops++ when all got shot
+        # revive cops++ when all got shot 
         if len(cop_list) == 0:
             num_cops += 1
             for i in range(num_cops):
@@ -348,7 +347,7 @@ def main():
         # player dead
         if player.health <= 0:
             display_box(screen, 'dead.. total cops shot: {}'.format(score))
-            sleepr.sleep(10) 
+            sleepr(10) 
             done = True
         # A.C.A.B. first endgegner dead
         if tank.health <= 0:
@@ -360,7 +359,7 @@ def main():
                 screen.fill(black)
                 screen.blit(pygame.font.Font(None, 96).render('Level 2', 1, white), (250, 150))
                 pygame.display.flip()
-                sleepr.sleep(5)
+                sleepr(5)
                 # -----------------------------------------------------------------------------
                 heli = Heli()
                 heli_list.add(heli)
@@ -369,7 +368,7 @@ def main():
             if heli.health <= 0:
                 score += 150
                 display_box(screen, 'A.C.A.B! total cops shot: {}'.format(score))
-                sleepr.sleep(10) 
+                sleepr(10) 
                 done = True
         # -----------------------------------------------------------------------------
         screen.fill(white)
