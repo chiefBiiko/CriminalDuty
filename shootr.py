@@ -1,6 +1,6 @@
 # CriminalDuty - a mini pygame
 # -----------------------------------------------------------------------------
-import os, random, math, pygame
+import os, random, math, string, pygame
 from pygame import *
 from time import sleep as sleepr
 
@@ -16,7 +16,7 @@ def main():
     score = 0
     done = False
     clock = pygame.time.Clock()
-    SONGS = [os.path.join('snd\\songs', 'Bando.mp3'), os.path.join('snd\\songs', 'KarateChop.mp3')]
+    SONGS = [os.path.join('snd\\songs', 'SD.mp3'), os.path.join('snd\\songs', 'BRICKZ.mp3')]
     KILLWAV = [os.path.join('snd\\kill', 'Gucci Mane Yeah (2).wav'), os.path.join('snd\\kill', 'Vox (Mafia-Hoe).wav')]
     HITWAV = os.path.join('snd\\hit', 'OJ Damn.wav')
     all_sprites_list, player_list, cop_list, tank_list, heli_list, bullet_list, canon_list, rocket_list = (pygame.sprite.Group() for i in range(8))
